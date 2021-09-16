@@ -1,39 +1,42 @@
-%preferuirement for minimizing an attribute
-%prefer(component|all, attribute, min|max|Value, priority)
-%prefer(front_brake, price, min, 1).
-prefer(all, price, min, 1).
-%prefer(all, price, le, 50, 1).
-prefer(bell, color, silver, 2).
+% pref(type, (...))
+% pref(min, (C|all, Attribute, Priority))
+% pref(max, (C|all, Attribute, Priority))
+% pref(attr, (C|all, Attribute, Value, Priority))
+% pref(negattr, (C|all, Attribute, Value, Priority))
+% pref(le, (C|all, Attribute, Value, Priority))
+% pref(ge, (C|all, Attribute, Value, Priority))
+% pref(comp, (C, Priority))
+% pref(negcomp, (C, Priority))
+
 
 
 % min/max over all components
-#minimize{S@P, A, C : assign(C, A, S), prefer(all, A, min, P)}.
-#maximize{S@P, A, C : assign(C, A, S), prefer(all, A, max, P)}.
+#minimize{S@P, A, C : assign(C, A, S), prefer(min, (all, A, P))}.
+#maximize{S@P, A, C : assign(C, A, S), prefer(max, (all, A, P))}.
 
 % min/max over specific component
-#minimize{S@P, A, C : assign(C, A, S), prefer(C, A, min, P)}.
-#maximize{S@P, A, C : assign(C, A, S), prefer(C, A, max, P)}.
+#minimize{S@P, A, C : assign(C, A, S), prefer(min, (C, A, P))}.
+#maximize{S@P, A, C : assign(C, A, S), prefer(max, (C, A, P))}.
 
-% prefer specific attribute
+% prefer/disprefer specific attribute
 % note that this usually needs a higher priority than min/max over numeric values to have an effect
-#maximize{1@P, V, A, C : assign(C, A, V), prefer(C, A, V, P)}.
+#maximize{1@P, V, A, C : assign(C, A, V), prefer(attr, (all, A, V, P))}.
+#maximize{1@P, V, A, C : assign(C, A, V), prefer(attr, (C, A, V, P))}.
+
+#minimize{1@P, V, A, C : assign(C, A, V), prefer(negattr, (all, A, V, P))}.
+#minimize{1@P, V, A, C : assign(C, A, V), prefer(negattr, (C, A, V, P))}.
+
+
+% prefer/disprefer components
+#maximize{1@P, C : component(C), prefer(comp, (C, P))}.
+#minimize{1@P, C : component(C), prefer(negcomp, (C, P))}.
 
 % ge/le ?
-% need to fix, doesn't actually check ge/le for the total price, only for every single component individually
-#minimize{S-X@P, A, C : assign(C, A, S), prefer(all, A, le, X, P), S >= X}.
-#minimize{S-X@P, A, C : assign(C, A, S), prefer(all, A, ge, X, P), S <= X}.
+total(A, T) :- #sum{V, C, A : assign(C, A, V)} = T, prefer((ge;le), (all, A, _, _)).
+#minimize{T-X@P, A : total(A, T), prefer(le, (all, A, X, P)), T >= X}.
+#minimize{X-T@P, A : total(A, T), prefer(ge, (all, A, X, P)), T <= X}.
 
 
-
-
-
-% Ideas for preferences:
-% min/max over value on all/single components
-% keep values in a boundary
-% prefer specific attributes like color
-% prefer attributes/component if other attributes/components exist
-
-
-
-
-
+% if A exists, try to include B
+% This rule would work both ways ...
+#maximize{1@P, V, A, C, V2, A2, C2 : assign(C, A, V), assign(C2, A2, V2), prefer(C, A, V, C2, A2, V2, P)}.
