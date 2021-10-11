@@ -1,0 +1,1 @@
+user_com_pv(req,(bike,type,city_bike)).user_com_pv(req,(cassette,size,8)).

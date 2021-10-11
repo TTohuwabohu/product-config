@@ -1,0 +1,1 @@
+default(min, (all, price, 0, 1)).
