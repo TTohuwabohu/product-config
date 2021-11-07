@@ -1,7 +1,7 @@
-#include "Defaults.lp".
+#include "defaults.lp".
 
 
-% prefer(type, (C|all, Attribute, Value, ID))
+% prefer(type, (Component|all, Attribute, Value, ID))
           
 % prefer(min, (C|all, Attribute, _, ID))
 % prefer(max, (C|all, Attribute, _, ID))
@@ -19,7 +19,7 @@
 
 % The weight preferences could all be in the same preference statement if they are comparable
 % putting them in seperate statements would result in more optimal answers on the pareto front
-#preference(minmax(ID), less(weight)) 
+#preference(weight(ID), less(weight)) 
 {
     S, A, C :: assign(C, A, S), prefer(min, (all, A, V, ID)); % #minimize statements
     -S, A, C :: assign(C, A, S), prefer(max, (all, A, V, ID)); % #maximize statements
@@ -61,5 +61,5 @@ total(C, A, T) :- #sum{V, C : assign(C, A, V)} = T, prefer((ge;le), (C, A, _, _)
 
 
 % Pareto preference to list the pareto front for the given preferences
-#preference(all, pareto) {**boundry(X); **attr(X); **minmax(X); **comp(X); **defaults}.
+#preference(all, pareto) {**boundry(X); **attr(X); **weight(X); **comp(X); **defaults}.
 #optimize(all).

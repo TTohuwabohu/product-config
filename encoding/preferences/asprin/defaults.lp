@@ -19,7 +19,7 @@ defaultCheck(comp, (C, A, V, ID)) :- default(comp, (C, A, V, ID)), not prefer(ne
 
 % The weight preferences could all be in the same preference statement if they are comparable
 % putting them in seperate statements would result in more answers on the pareto front
-#preference(minmaxDefault(ID), less(weight)) 
+#preference(weightDefault(ID), less(weight)) 
 {
     S, A, C :: assign(C, A, S), default(min, (all, A, V, ID));
     -S, A, C :: assign(C, A, S), default(max, (all, A, V, ID));
@@ -59,5 +59,5 @@ total(A, T) :- #sum{V, C : assign(C, A, V)} = T, prefer((ge;le), (all, A, _, _))
 
 
 % Pareto preference to list the pareto front for the given preferences
-#preference(defaults, pareto) {**boundryDefault(X); **attrDefault(X); **minmaxDefault(X); **compDefault(X)}.
+#preference(defaults, pareto) {**boundryDefault(X); **attrDefault(X); **weightDefault(X); **compDefault(X)}.
 
