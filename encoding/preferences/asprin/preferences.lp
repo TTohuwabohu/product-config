@@ -1,6 +1,9 @@
 #include "defaults.lp".
 
 
+total(S) :- #sum{P, C : assign(C, price, P)} = S.
+#show total/1.
+
 % prefer(type, (Component|all, Attribute, Value, ID))
           
 % prefer(min, (C|all, Attribute, _, ID))
@@ -42,20 +45,20 @@ total(C, A, T) :- #sum{V, C : assign(C, A, V)} = T, prefer((ge;le), (C, A, _, _)
 
 
 % Prefering or disprefering certain components
-#preference(comp(ID), poset)
+#preference(comp(ID), less(weight))
 {
-	component(C) : domain(C, _, _), prefer(comp, (C, A, V, ID));
-	not component(C) : domain(C, _, _), prefer(negcomp, (C, A, V, ID))
+	-1, C :: component(C), domain(C, A, V), prefer(comp, (C, A, V, ID));
+	-1, C :: not component(C), domain(C, A, V), prefer(negcomp, (C, A, V, ID))
 } : prefer(comp, (_, _, _, ID)).
 
 
 %Prefering or disprefering certain attributes (color, material, ...)
-#preference(attr(ID), poset)
+#preference(attr(ID), less(weight))
 {    
-    assign(C, A, V) : domain(C, A, V), prefer(attr, (C, A, V, ID));
-    assign(C, A, V) : domain(C, A, V), prefer(attr, (all, A, V, ID));
-    not assign(C, A, V) : domain(C, A, V), prefer(negattr, (C, A, V, ID));
-    not assign(C, A, V) : domain(C, A, V), prefer(negattr, (all, A, V, ID))
+    -1, C, A, V :: assign(C, A, V) , domain(C, A, V), prefer(attr, (C, A, V, ID));
+    -1, C, A, V :: assign(C, A, V) , domain(C, A, V), prefer(attr, (all, A, V, ID));
+    -1, C, A, V :: not assign(C, A, V) , domain(C, A, V), prefer(negattr, (C, A, V, ID));
+    -1, C, A, V :: not assign(C, A, V) , domain(C, A, V), prefer(negattr, (all, A, V, ID))
 } : prefer(attr, (_, _, _, ID)).
 
 

@@ -1,3 +1,3 @@
 #include "show.lp".
-#include "../users/user3.lp".
-#include "../preferences/preference3.lp".
+#include "../users/users/user3.lp".
+#include "../users/preferences/preference3.lp".
