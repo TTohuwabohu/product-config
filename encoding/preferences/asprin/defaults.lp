@@ -44,7 +44,7 @@ total(A, T) :- #sum{V, C : assign(C, A, V)} = T, prefer((ge;le), (all, A, _, _))
 {
 	-1, C :: component(C), domain(C, A, V), default(comp, (C, A, V, ID));
 	-1, C :: not component(C), domain(C, A, V), default(negcomp, (C, A, V, ID))
-} : default((comp;negcomp), (_, _, _, ID)).
+} : defaultCheck((comp;negcomp), (_, _, _, ID)).
 
 
 %Prefering or disprefering certain attributes (color, material, ...)
@@ -54,7 +54,7 @@ total(A, T) :- #sum{V, C : assign(C, A, V)} = T, prefer((ge;le), (all, A, _, _))
     -1, C, A, V :: assign(C, A, V) , domain(C, A, V), default(attr, (all, A, V, ID));
     -1, C, A, V :: not assign(C, A, V) , domain(C, A, V), default(negattr, (C, A, V, ID));
     -1, C, A, V :: not assign(C, A, V) , domain(C, A, V), default(negattr, (all, A, V, ID))
-} : default((attr;negattr), (_, _, _, ID)).
+} : defaultCheck((attr;negattr), (_, _, _, ID)).
 
 % Pareto preference to list the pareto front for the given preferences
 #preference(defaults, pareto) {**boundryDefault(X); **attrDefault(X); **weightDefault(X); **compDefault(X)}.
