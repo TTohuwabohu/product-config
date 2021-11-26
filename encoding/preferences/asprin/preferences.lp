@@ -49,7 +49,7 @@ total(C, A, T) :- #sum{V, C : assign(C, A, V)} = T, prefer((ge;le), (C, A, _, _)
 {
 	-1, C :: component(C), domain(C, A, V), prefer(comp, (C, A, V, ID));
 	-1, C :: not component(C), domain(C, A, V), prefer(negcomp, (C, A, V, ID))
-} : prefer(comp, (_, _, _, ID)).
+} : prefer((comp;negcomp), (_, _, _, ID)).
 
 
 %Prefering or disprefering certain attributes (color, material, ...)
@@ -59,7 +59,7 @@ total(C, A, T) :- #sum{V, C : assign(C, A, V)} = T, prefer((ge;le), (C, A, _, _)
     -1, C, A, V :: assign(C, A, V) , domain(C, A, V), prefer(attr, (all, A, V, ID));
     -1, C, A, V :: not assign(C, A, V) , domain(C, A, V), prefer(negattr, (C, A, V, ID));
     -1, C, A, V :: not assign(C, A, V) , domain(C, A, V), prefer(negattr, (all, A, V, ID))
-} : prefer(attr, (_, _, _, ID)).
+} : prefer((attr;negattr), (_, _, _, ID)).
 
 
 
