@@ -1,5 +1,3 @@
-#include "defaults.lp".
-
 % prefer(type, (Component|all, Attribute, Value), (Priority, Weight))
           
 % prefer(min, (C|all, Attribute, _), (P, W))
